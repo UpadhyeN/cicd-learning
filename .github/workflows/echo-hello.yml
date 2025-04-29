@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: second stage of the job
         run: echo "Hello world from the second stage"
+  use-common:
+    uses: ./.github/workflows/common.yml
   
   failed:
     needs: show-vars

@@ -1,0 +1,12 @@
+# .github/workflows/common.yml
+name: Common Workflow
+
+on:
+  workflow_call:  # This makes it reusable
+
+jobs:
+  shared-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Shared step
+        run: echo "Hello from the reusable workflow!"
