@@ -13,7 +13,7 @@ jobs:
           echo "VAR_2 from repository: ${{ vars.var2 }}"
   second-stage:
     runs-on: ubuntu-latest
-      steps:
-        - name: second stage of the job
-          run: echo "Hello world from the second stage"
+    steps:
+      - name: second stage of the job
+        run: echo "Hello world from the second stage"
   
