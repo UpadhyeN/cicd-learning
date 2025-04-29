@@ -8,3 +8,8 @@ jobs:
     steps:
       - name: Say hello
         run: echo "hello world"
+  say-Hi:
+    runs-on: alpine-latest
+    steps:
+      - name: pwd
+        run: pwd
