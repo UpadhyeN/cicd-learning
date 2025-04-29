@@ -1,13 +1,13 @@
-name: Hello world
+name: Print environment and repo secrets
 
 on: [push]
 
 jobs:
-  say-hello:
+  show-vars:
     runs-on: ubuntu-latest
-    container: alpine:latest
+    environment: production  # This links the job to the 'production' environment
     steps:
-      - name: Say hello
-        run: echo "hello world"
-      - name: Say Hi
-        run: pwd
+      - name: Print environment variable VAR_1 and repository variable VAR_2
+        run: |
+          echo "VAR_1 from environment: ${{ secrets.VAR_1 }}"
+          echo "VAR_2 from repository: ${{ secrets.VAR_2 }}"
