@@ -12,8 +12,17 @@ jobs:
           echo "VAR_1 from environment: ${{ vars.VAR_1 }}"
           echo "VAR_2 from repository: ${{ vars.var2 }}"
   second-stage:
+    needs: show-vars
+    if: ${{ success()}}
     runs-on: ubuntu-latest
     steps:
       - name: second stage of the job
         run: echo "Hello world from the second stage"
   
+  failed:
+    needs: show-vars
+    if: ${{ failure() }}  # Only run if show-vars failed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Failure handling
+        run: echo "Failure occurred in show-vars job"
