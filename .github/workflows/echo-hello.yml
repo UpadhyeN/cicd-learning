@@ -5,11 +5,9 @@ on: [push]
 jobs:
   say-hello:
     runs-on: ubuntu-latest
+    container: alpine:latest
     steps:
       - name: Say hello
         run: echo "hello world"
-  say-Hi:
-    runs-on: alpine-latest
-    steps:
-      - name: pwd
+      - name: Say Hi
         run: pwd
