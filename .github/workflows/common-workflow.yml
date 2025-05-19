@@ -1,12 +1,24 @@
-# .github/workflows/common.yml
-name: Common Workflow
+name: Run Selected Jobs
 
 on:
-  workflow_call:  # This makes it reusable
+  workflow_dispatch:
+    inputs:
+      jobs_to_run:
+        description: 'Comma-separated list of jobs to run (e.g. job1,job3)'
+        required: true
+        default: 'job1'
 
 jobs:
-  shared-job:
+  dynamic-jobs:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        jobname: [job1, job2, job3, job4, job5]
+
+    # Only run this job if the current matrix jobname is in the input string
+    if: contains(github.event.inputs.jobs_to_run, matrix.jobname)
+
+    name: Run ${{ matrix.jobname }}
     steps:
-      - name: Shared step
-        run: echo "Hello from the reusable workflow!"
+      - name: Execute selected job
+        run: echo "Running ${{ matrix.jobname }}"
