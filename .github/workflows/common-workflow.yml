@@ -11,14 +11,20 @@ on:
 jobs:
   dynamic-jobs:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        jobname: [job1, job2, job3, job4, job5]
+        jobname: [job1]
 
-    # Only run this job if the current matrix jobname is in the input string
     if: contains(github.event.inputs.jobs_to_run, matrix.jobname)
 
     name: Run ${{ matrix.jobname }}
+
     steps:
-      - name: Execute selected job
-        run: echo "Running ${{ matrix.jobname }}"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run script for ${{ matrix.jobname }}
+        run: |
+          chmod +x ./scripts/${{ matrix.jobname }}.sh
+          ./scripts/${{ matrix.jobname }}.sh
