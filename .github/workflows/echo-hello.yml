@@ -1,30 +1,13 @@
-name: Print environment and repo secrets
-
-on: [push, workflow_dispatch]
+name: echo hello world
+on:
+  push:
+    branches:
+      - main 
 
 jobs:
-  show-vars:
+  say-hello:
     runs-on: ubuntu-latest
-    environment: production  # This links the job to the 'production' environment
-    steps:
-      - name: Print environment variable VAR_1 and repository variable VAR_2
-        run: |
-          echo "VAR_1 from environment: ${{ vars.VAR_1 }}"
-          echo "VAR_2 from repository: ${{ vars.var2 }}"
-  second-stage:
-    needs: show-vars
-    if: ${{ success()}}
-    runs-on: ubuntu-latest
-    steps:
-      - name: second stage of the job
-        run: echo "Hello world from the second stage"
-  use-common:
-    uses: ./.github/workflows/common-workflow.yml
-  
-  failed:
-    needs: show-vars
-    if: ${{ failure() }}  # Only run if show-vars failed
-    runs-on: ubuntu-latest
-    steps:
-      - name: Failure handling
-        run: echo "Failure occurred in show-vars job"
+
+  steps:
+    - name: echo Hello world
+      run: echo "Hello world"
