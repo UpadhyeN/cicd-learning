@@ -7,7 +7,6 @@ on:
 jobs:
   say-hello:
     runs-on: ubuntu-latest
-
-  steps:
-    - name: echo Hello world
-      run: echo "Hello world"
+    steps:
+      - name: echo Hello world
+        run: echo "Hello world"
