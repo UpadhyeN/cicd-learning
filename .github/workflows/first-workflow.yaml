@@ -20,4 +20,4 @@ jobs:
         with:
           node-version: 18
       - name: install requirements
-        run: pip install requirements.txt
+        run: pip install -r requirements.txt
