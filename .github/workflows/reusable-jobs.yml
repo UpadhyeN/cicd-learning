@@ -8,7 +8,7 @@ on:
         type: string
 
 jobs:
-  run-jobs:
+  dynamic-jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJson(inputs.matrix) }}
@@ -21,27 +21,26 @@ jobs:
         if: ${{ matrix.job == 'build' }}
         run: |
           echo "🛠️ Building project..."
-          echo "Compiling..."
           sleep 1
-          echo "✅ Build done"
+          echo "✅ Build complete"
 
       - name: Run Tests
         if: ${{ matrix.job == 'test' }}
         run: |
           echo "🧪 Running tests..."
           sleep 1
-          echo "✅ All tests passed"
+          echo "✅ Tests passed"
 
       - name: Lint Code
         if: ${{ matrix.job == 'lint' }}
         run: |
-          echo "🧹 Running linter..."
+          echo "🧹 Linting..."
           sleep 1
-          echo "✅ No issues found"
+          echo "✅ Lint passed"
 
       - name: Deploy App
         if: ${{ matrix.job == 'deploy' }}
         run: |
           echo "🚀 Deploying..."
           sleep 1
-          echo "✅ Deployed successfully"
+          echo "✅ Deployment complete"
