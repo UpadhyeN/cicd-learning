@@ -1,11 +1,12 @@
-name: Run Developer-Specific Jobs
+name: Developer Controlled Jobs
 
 on:
   workflow_dispatch:
     inputs:
       developer:
-        description: 'Developer Name (e.g. Dev1, Dev2)'
+        description: 'Developer name (e.g., Dev1, Dev2)'
         required: true
+        default: Dev1
 
 jobs:
   read-config:
@@ -21,15 +22,14 @@ jobs:
 
       - name: Install yq
         run: |
-          sudo apt-get update
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
           sudo chmod +x /usr/bin/yq
 
-      - name: Parse job-config
+      - name: Parse job-config.yml
         id: set
         run: |
           DEV="${{ github.event.inputs.developer }}"
-          JOBS=$(yq e ".$DEV[]" job-config.yml)
+          JOBS=$(yq e ".${DEV}[]" job-config.yml)
 
           for JOB in job1 job2 job3 job4 job5; do
             if echo "$JOBS" | grep -q "$JOB"; then
@@ -44,32 +44,32 @@ jobs:
     if: ${{ needs.read-config.outputs.job1 == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Running Job 1"
+      - run: echo "Running job1"
 
   job2:
     needs: read-config
     if: ${{ needs.read-config.outputs.job2 == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Running Job 2"
+      - run: echo "Running job2"
 
   job3:
     needs: read-config
     if: ${{ needs.read-config.outputs.job3 == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Running Job 3"
+      - run: echo "Running job3"
 
   job4:
     needs: read-config
     if: ${{ needs.read-config.outputs.job4 == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Running Job 4"
+      - run: echo "Running job4"
 
   job5:
     needs: read-config
     if: ${{ needs.read-config.outputs.job5 == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Running Job 5"
+      - run: echo "Running job5"
