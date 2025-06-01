@@ -1,0 +1,47 @@
+name: Reusable Job Executor
+
+on:
+  workflow_call:
+    inputs:
+      matrix:
+        required: true
+        type: string
+
+jobs:
+  run-jobs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(inputs.matrix) }}
+    name: Run ${{ matrix.job }}
+    steps:
+      - name: Running ${{ matrix.job }}
+        run: echo "🔧 Running job: ${{ matrix.job }}"
+
+      - name: Build Project
+        if: ${{ matrix.job == 'build' }}
+        run: |
+          echo "🛠️ Building project..."
+          echo "Compiling..."
+          sleep 1
+          echo "✅ Build done"
+
+      - name: Run Tests
+        if: ${{ matrix.job == 'test' }}
+        run: |
+          echo "🧪 Running tests..."
+          sleep 1
+          echo "✅ All tests passed"
+
+      - name: Lint Code
+        if: ${{ matrix.job == 'lint' }}
+        run: |
+          echo "🧹 Running linter..."
+          sleep 1
+          echo "✅ No issues found"
+
+      - name: Deploy App
+        if: ${{ matrix.job == 'deploy' }}
+        run: |
+          echo "🚀 Deploying..."
+          sleep 1
+          echo "✅ Deployed successfully"

@@ -1,9 +1,7 @@
 Dev1:
-  - job1
-  - job2
-  - job3
+  - build
+  - test
 
 Dev2:
-  - job3
-  - job4
-  - job5
+  - lint
+  - deploy
