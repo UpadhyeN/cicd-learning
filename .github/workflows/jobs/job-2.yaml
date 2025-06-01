@@ -1,0 +1,21 @@
+# .github/workflows/jobs/job2.yml
+name: Reusable Job 2
+
+on:
+  workflow_call:
+    inputs:
+      message:
+        required: false
+        type: string
+        default: 'Hello from Job 2!'
+
+jobs:
+  run-job2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Execute Job 2 Logic
+        run: |
+          echo "Running Job 2 with message: ${{ inputs.message }}"
+          # Add your actual job 2 commands here

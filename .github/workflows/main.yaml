@@ -1,0 +1,74 @@
+name: Run Developer-Specific Jobs
+
+on:
+  workflow_dispatch:
+    inputs:
+      developer:
+        description: 'Developer Name (e.g. Dev1, Dev2)'
+        required: true
+
+jobs:
+  read-config:
+    runs-on: ubuntu-latest
+    outputs:
+      job1: ${{ steps.set.outputs.job1 }}
+      job2: ${{ steps.set.outputs.job2 }}
+      job3: ${{ steps.set.outputs.job3 }}
+      job4: ${{ steps.set.outputs.job4 }}
+      job5: ${{ steps.set.outputs.job5 }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yq
+
+      - name: Parse job-config
+        id: set
+        run: |
+          DEV="${{ github.event.inputs.developer }}"
+          JOBS=$(yq e ".$DEV[]" job-config.yml)
+
+          for JOB in job1 job2 job3 job4 job5; do
+            if echo "$JOBS" | grep -q "$JOB"; then
+              echo "$JOB=true" >> $GITHUB_OUTPUT
+            else
+              echo "$JOB=false" >> $GITHUB_OUTPUT
+            fi
+          done
+
+  job1:
+    needs: read-config
+    if: ${{ needs.read-config.outputs.job1 == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running Job 1"
+
+  job2:
+    needs: read-config
+    if: ${{ needs.read-config.outputs.job2 == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running Job 2"
+
+  job3:
+    needs: read-config
+    if: ${{ needs.read-config.outputs.job3 == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running Job 3"
+
+  job4:
+    needs: read-config
+    if: ${{ needs.read-config.outputs.job4 == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running Job 4"
+
+  job5:
+    needs: read-config
+    if: ${{ needs.read-config.outputs.job5 == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running Job 5"
