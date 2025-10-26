@@ -1,34 +1,22 @@
-name: Developer Controlled Jobs
+name: Print commit SHAs
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
-    inputs:
-      developer:
-        description: 'Developer name (e.g., Dev1, Dev2)'
-        required: true
-        default: Dev1
 
 jobs:
-  read-config:
+  show-shas:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Install yq
-        run: |
-          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
-          sudo chmod +x /usr/bin/yq
+      - name: Checkout repo (fetch at least 2 commits)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Needed to access previous commit
 
-      - name: Read job-config.yml for developer
-        id: set
+      - name: Show current and previous commit SHAs
         run: |
-          DEV="${{ github.event.inputs.developer }}"
-          JOBS=$(yq e -o=json ".\"$DEV\"" job-config.yml)
-          echo "matrix={\"job\": $JOBS}" >> $GITHUB_OUTPUT
-
-  run-jobs:
-    needs: read-config
-    uses: ./.github/workflows/reusable-jobs.yml
-    with:
-      matrix: ${{ needs.read-config.outputs.matrix }}
+          echo "Current commit: $GITHUB_SHA"
+          PREV_SHA=$(git rev-parse HEAD^)
+          echo "Previous commit: $PREV_SHA"
