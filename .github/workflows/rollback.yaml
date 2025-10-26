@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: write  # <-- This allows git push with GITHUB_TOKEN
+  workflows: write
 
 jobs:
   rollback:
