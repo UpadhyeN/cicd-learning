@@ -1,0 +1,28 @@
+name: Rollback
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write  # <-- This allows git push with GITHUB_TOKEN
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout with write access
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Revert to previous commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          PREV_SHA=$(git rev-parse HEAD^)
+          echo "Previous commit: $PREV_SHA"
+
+          git reset --hard $PREV_SHA
+          git push origin HEAD --force

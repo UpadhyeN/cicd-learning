@@ -17,12 +17,3 @@ jobs:
           echo "Current commit: $GITHUB_SHA"
           PREV_SHA=$(git rev-parse HEAD^)
           echo "Previous commit: $PREV_SHA"
-
-      - name: Force reset to previous commit
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          PREV_SHA=$(git rev-parse HEAD^)
-          git reset --hard $PREV_SHA
-          git push origin HEAD --force
