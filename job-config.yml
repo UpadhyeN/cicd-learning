@@ -1,7 +1,0 @@
-Dev1:
-  - build
-  - test
-
-Dev2:
-  - lint
-  - deploy
