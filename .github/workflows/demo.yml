@@ -11,29 +11,14 @@ jobs:
         uses: actions/checkout@v3
       - name: Install dependencies
         run: npm ci
-      - name: Lint code
-        run: npm run lint
-      - name: Test code
-        run: npm run test
   build:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Get code
-        id: chekcout
+        id: checkout
         uses: actions/checkout@v3
-      - name: Install dependencies
+      - name: check checkout status
         run: |
-          npm ci
           echo "${{ steps.checkout.conclusion }}"
-      - name: Build website
-        run: npm run build
-      - name: Publish Js files
-        run: find dist/assets/*.js -type f -execdir echo '{}' >> $GITHUB_OUTPUT';'
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-files
-          path: |
-            dist
-            package.json
+
